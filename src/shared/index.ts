@@ -1,0 +1,10 @@
+export { getUserUUID } from "../utils/uuid";
+export { useToolsConfig } from "../hooks/use-tools-config";
+export { useTextSelection } from "../hooks/use-text-selection";
+export { default as Popup } from "../components/pop-up"; 
+export { exportDOCX, exportPDF } from "../utils/export-utils";
+export { cleanFormatting, removeEmojis, replaceEmojiWithText } from "../utils/text-utils";
+export { iconRegistry } from '../components/FloatingPopup/iconRegistry';
+export { textActionRegistry } from '../components/FloatingPopup/textActions';
+export { exportActionRegistry } from '../components/FloatingPopup/exportActions';
+export {default as toolsConfig} from '../config/popup-actions.json';

@@ -10,8 +10,8 @@ const EMOJI_MAP: Record<string, string> = {
 export const cleanFormatting = (text: string): string => {
   return text
     .replace(/#{1,6}\s?/g, '') 
-    .replace(/[*]\s/g, '• ')      // Standardize bullets (removed unnecessary escape)
-    .replace(/\n{3,}/g, '\n\n')   // Fix excessive spacing
+    .replace(/[*]\s/g, '• ')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 };
 

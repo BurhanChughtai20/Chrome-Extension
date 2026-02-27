@@ -1,11 +1,16 @@
-import Popup from "./component/Popup"
+import { Popup } from "./shared";
+import { Helmet } from "react-helmet";
 
 const App = () => {
   return (
-    <div>
+    <>
+     <Helmet>
+      <title>My Chrome Extension - Free Daily AI Tool</title>
+      <meta name="description" content="Get 3 free daily requests with our Chrome AI extension..." />
+    </Helmet>
       <Popup/>
-    </div>
+    </>
   )
 }
 
-export default App
+export default App;

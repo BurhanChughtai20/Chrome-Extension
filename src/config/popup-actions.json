@@ -1,0 +1,38 @@
+{
+  "optimizationTools": [
+    {
+      "id": "clean",
+      "label": "Smart Format & Clean",
+      "icon": "sparkles",
+      "action": "cleanFormatting"
+    },
+    {
+      "id": "removeEmoji",
+      "label": "No Emojis",
+      "icon": "frown",
+      "action": "removeEmojis"
+    },
+    {
+      "id": "emojiToText",
+      "label": "Text Emojis",
+      "icon": "smile",
+      "action": "replaceEmojiWithText"
+    }
+  ],
+  "exportActions": [
+    {
+      "id": "pdf",
+      "label": "PDF",
+      "icon": "fileDown",
+      "action": "exportPDF",
+      "colorPalette": "gray"
+    },
+    {
+      "id": "docx",
+      "label": "Word",
+      "icon": "fileText",
+      "action": "exportDOCX",
+      "colorPalette": "blue"
+    }
+  ]
+}
