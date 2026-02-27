@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Sparkles, Copy, Check, Type } from "lucide-react";
-import { cleanFormatting } from "./utils/text-utils";
+import { Button } from "@chakra-ui/react";
+import { cleanText } from "./shared";
 
-interface TextProPopupProps {
+interface ContentPopupProps {
   delay?: number;
 }
 
-const TextProPopup: React.FC<TextProPopupProps> = ({ delay = 100 }) => {
+const ContentPopup: React.FC<ContentPopupProps> = ({ delay = 100 }) => {
   const [selection, setSelection] = useState<string>("");
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
@@ -66,9 +67,16 @@ const TextProPopup: React.FC<TextProPopupProps> = ({ delay = 100 }) => {
     };
   }, [handleSelection, delay]);
 
-  const handleClean = (): void => {
-    setSelection(cleanFormatting(selection));
-  };
+  const handleClean =async (): Promise<void> =>{
+  if (!selection.trim()) return;
+
+  try {
+    const cleaned = await cleanText(selection);
+    setSelection(cleaned);
+  } catch (err) {
+    console.error("Failed to clean text", err);
+  }
+};
 
   const handleCopy = async (): Promise<void> => {
     try {
@@ -149,21 +157,21 @@ const TextProPopup: React.FC<TextProPopupProps> = ({ delay = 100 }) => {
       />
 
       <div style={{ display: "flex", gap: "8px" }}>
-        <button type="button" onClick={handleClean} style={buttonStyle}>
+        <Button type="button" onClick={handleClean} style={buttonStyle}>
           <Sparkles size={14} style={{ color: "#a78bfa" }} />
           Clean
-        </button>
-        <button type="button" onClick={handleCopy} style={buttonStyle}>
+        </Button>
+        <Button type="button" onClick={handleCopy} style={buttonStyle}>
           {isCopied ? (
             <Check size={14} style={{ color: "#4ade80" }} />
           ) : (
             <Copy size={14} style={{ color: "#60a5fa" }} />
           )}
           {isCopied ? "Copied" : "Copy"}
-        </button>
+        </Button>
       </div>
     </div>
   );
 };
 
-export default TextProPopup;
+export default ContentPopup;

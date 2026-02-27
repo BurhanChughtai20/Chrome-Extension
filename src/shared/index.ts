@@ -8,3 +8,4 @@ export { iconRegistry } from '../components/FloatingPopup/iconRegistry';
 export { textActionRegistry } from '../components/FloatingPopup/textActions';
 export { exportActionRegistry } from '../components/FloatingPopup/exportActions';
 export {default as toolsConfig} from '../config/popup-actions.json';
+export { cleanText } from "../api/textApi";
