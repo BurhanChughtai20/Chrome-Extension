@@ -11,6 +11,6 @@ async function TextFormatterRoute(fastify: FastifyInstance) {
       data: result,
     });
   });
-}
+};
 
 export default TextFormatterRoute;
