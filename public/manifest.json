@@ -3,13 +3,25 @@
   "name": "ChatGPT Text Formatter",
   "version": "1.0",
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icons/vite.svg",
+      "32": "icons/vite.svg",
+      "48": "icons/vite.svg",
+      "128": "icons/vite.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/vite.svg",
+    "32": "icons/vite.svg",
+    "48": "icons/vite.svg",
+    "128": "icons/vite.svg"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": ["App.js"],
+      "css": ["index.css"]
     }
   ],
   "permissions": ["activeTab", "scripting"]

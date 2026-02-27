@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
-import type { ReactElement } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Copy } from "lucide-react";
 import {
@@ -18,14 +18,66 @@ import {
 } from "@chakra-ui/react";
 import { getUserUUID, useTextSelection, useToolsConfig } from "../shared";
 
-const Popup = (): ReactElement =>{
+const Popup = (): ReactNode => {
+  const popupRef = useRef<HTMLDivElement>(null);
   const uuid = useMemo(() => getUserUUID(), []);
   const { optimizationTools, exportActions } = useToolsConfig();
-  const { text, isLoading, fetchSelection, setText } = useTextSelection();
+  const { text, isLoading, setText } = useTextSelection();
 
-  useMemo(() => {
-    fetchSelection();
-  }, [fetchSelection]);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);
+
+  // FLOATING SELECTION LOGIC
+  const handleSelection = useCallback(() => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) {
+      if (!popupRef.current?.contains(document.activeElement)) {
+        setIsVisible(false);
+      }
+      return;
+    }
+
+    const selectedText = sel.toString().trim();
+    if (!selectedText) {
+      setIsVisible(false);
+      return;
+    }
+
+    const range = sel.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    setText(selectedText);
+    setCoords({
+      x: rect.left + window.scrollX,
+      y: rect.bottom + window.scrollY + 8,
+    });
+    setIsVisible(true);
+  }, [setText]);
+
+  useEffect(() => {
+    let timeoutId: number;
+    const debouncedHandle = () => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(handleSelection, 100);
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+        setIsVisible(false);
+      }
+    };
+
+    document.addEventListener("mouseup", debouncedHandle);
+    document.addEventListener("keyup", debouncedHandle);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mouseup", debouncedHandle);
+      document.removeEventListener("keyup", debouncedHandle);
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.clearTimeout(timeoutId);
+    };
+  }, [handleSelection]);
 
   const handleCopy = useCallback(async () => {
     if (!text.trim()) return;
@@ -47,14 +99,26 @@ const Popup = (): ReactElement =>{
     [text]
   );
 
+  if (!isVisible) return null;
+
   return (
-    <Box w="460px" p="3" bg="black">
+    <Box
+      ref={popupRef}
+      position="fixed"
+      top={`${coords.y}px`}
+      left={`${coords.x}px`}
+      w="460px"
+      maxW="90vw"
+      zIndex={9999}
+      pointerEvents="auto"
+    >
       <Box
         bg="black"
         borderRadius="2xl"
-        boxShadow="0 10px 25px rgba(255,255,255,0.15)"
+        boxShadow="0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)"
         borderWidth="1px"
         p="5"
+        backdropFilter="blur(20px)"
       >
         <HStack justify="space-between" mb="4">
           <Stack gap="0">
@@ -98,6 +162,7 @@ const Popup = (): ReactElement =>{
               h="180px"
               borderRadius="xl"
               fontSize="sm"
+              borderColor="gray.700"
             />
 
             <Button
@@ -152,7 +217,7 @@ const Popup = (): ReactElement =>{
             {exportActions.map((item) => (
               <Button
                 key={item.id}
-                colorPalette={item.colorPalette}
+                colorScheme={item.colorPalette} // Chakra uses colorScheme instead of colorPalette
                 borderRadius="xl"
                 onClick={() => handleExport(item.action)}
                 disabled={!text.trim()}
@@ -173,7 +238,7 @@ const Popup = (): ReactElement =>{
           >
             <Text>Session: {uuid.slice(0, 8)}</Text>
             <Badge
-              colorPalette={isLoading ? "yellow" : "green"}
+              colorScheme={isLoading ? "yellow" : "green"} // Chakra uses colorScheme
               borderRadius="md"
             >
               {isLoading ? "Loading..." : "Ready"}
@@ -183,6 +248,6 @@ const Popup = (): ReactElement =>{
       </Box>
     </Box>
   );
-}
+};
 
 export default Popup;
