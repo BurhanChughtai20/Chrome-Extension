@@ -1,16 +1,13 @@
-import { Popup } from "./shared";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
+import PopupPage from "./components/pop-up";
 
 const App = () => (
   <>
     <Helmet>
-      <title>My Chrome Extension - Free Daily AI Tool</title>
-      <meta
-        name="description"
-        content="Get 3 free daily requests with our Chrome AI extension..."
-      />
+      <title>TextPro – AI Formatter</title>
+      <meta name="description" content="Format and transform selected text with AI" />
     </Helmet>
-    <Popup />
+    <PopupPage />
   </>
 );
 

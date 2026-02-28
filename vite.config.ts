@@ -14,22 +14,17 @@ export default defineConfig({
       targets: [
         { src: "public/manifest.json", dest: "." },
         { src: "src/index.css", dest: "." },
-        { src: "public/icons", dest: "icons" } // make sure vite.svg is inside public/icons
-      ]
-    })
+        { src: "public/icons", dest: "icons" },
+      ],
+    }),
   ],
   build: {
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        content: resolve(__dirname, "src/App.tsx")
       },
-      output: {
-        entryFileNames: (chunk) =>
-          chunk.name === "App" ? "App.js" : "assets/[name]-[hash].js"
-      }
     },
     outDir: "dist",
-    emptyOutDir: true
-  }
+    emptyOutDir: true,
+  },
 });
