@@ -1,15 +1,12 @@
-import { MongoClient } from "mongodb";
-
-let client: MongoClient;
+import mongoose from "mongoose";
 
 export async function connectMongo() {
   const uri = process.env.MONGO_URI;
   if (!uri) throw new Error("MONGO_URI missing in .env");
 
-  client = new MongoClient(uri);
   try {
-    await client.connect();
-    console.log("MongoDB connected");
+    await mongoose.connect(uri);
+    console.log("MongoDB connected via Mongoose");
   } catch (err) {
     console.error("MongoDB connection error:", err);
     throw err;
@@ -17,5 +14,5 @@ export async function connectMongo() {
 }
 
 export async function closeMongo() {
-  if (client) await client.close();
+  await mongoose.connection.close();
 }

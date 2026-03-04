@@ -1,10 +1,10 @@
 import type { FastifyInstance } from "fastify";
 import BillingRoute from "./billing.route.ts";
-import ToneAdjusterRoute from "./toneAdjuster.route.ts";
-import LanguageOptimizerRoute from "./languageOptimizer.route.ts";
-import TextFormatterRoute from "./textFormate.route.ts";
+import ToneAdjusterRoute from "./tone-adjuster.route.ts";
+import LanguageOptimizerRoute from "./language-optimizer.route.ts";
+import TextFormatterRoute from "./text-formatter.route.ts";
 export async function registerRoutes(fastify: FastifyInstance) {
-  const API_PREFIX = process.env.API_PREFIX || "/v2";
+  const API_PREFIX = process.env.API_PREFIX || "/v1";
 
   const routes: { module: any; prefix: string }[] = [
     { module: TextFormatterRoute, prefix: `${API_PREFIX}/text` },
@@ -15,4 +15,5 @@ export async function registerRoutes(fastify: FastifyInstance) {
   await Promise.all(
     routes.map(({ module, prefix }) => fastify.register(module, { prefix })),
   );
+  console.log("Registering:", routes);
 }

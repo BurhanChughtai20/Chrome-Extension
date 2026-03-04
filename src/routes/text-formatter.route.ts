@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { FormatterText } from "../types/text.interface.ts";
-import { formatTextController } from "../controllers/textFormatter.controller.ts";
+import { formatTextController } from "../controllers/text-formatter.controller.ts";
 
 async function TextFormatterRoute(fastify: FastifyInstance) {
   fastify.post<{ Body: FormatterText }>("/clean", async (req, reply) => {

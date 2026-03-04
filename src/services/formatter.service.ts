@@ -2,10 +2,12 @@ import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
 const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
+  model: "gpt-3.5-turbo",
   temperature: 0.3,
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+console.log("OPENAI_API_KEY:", process.env.OPENAI_API_KEY?.slice(0, 8), "...");
 
 export async function processWithLangchain(text: string) {
   const response = await model.invoke([

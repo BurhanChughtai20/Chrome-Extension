@@ -12,13 +12,14 @@ export async function formatTextController(body: FormatterText) {
     throw error;
   }
 
-  const user = await UserModel.findOne({ uuid });
+  let user = await UserModel.findOne({ uuid });
 
   if (!user) {
-    const error: any = new Error("User not found");
-    error.statusCode = 404;
-    throw error;
-  }
+  user = await UserModel.create({
+    uuid,
+    dailyTokensUsed: 0,
+  });
+}
 
   enforceDailyUsageLimit(user, text);
 
